@@ -2,6 +2,16 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.IOException;
+
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -14,16 +24,21 @@ import javax.swing.SwingConstants;
  * A GUI for the Clock.
  * 
  * @author n-c0de-r
- * @version 21.07.22
+ * @version 2021.07.22
  */
 public class GUI {
 	
-	Clock clock;
-	JLabel hours, dots, minutes;
-	JPanel clockPanel, alarmPanel;
-	JTextField alarmHours, alarmMinutes;
-	JToggleButton alarm;
-	String time, hour, minute, alarmTime, alarmHour, alarmMinute;
+	private Clock clock;
+	private ClockThread clockRunning;
+	
+	private JLabel hours, dots, minutes;
+	private JPanel clockPanel, alarmPanel;
+	private JTextField alarmHours, alarmMinutes;
+	private JToggleButton alarm;
+	
+	private String time, hour, minute, alarmTime, alarmHour, alarmMinute;
+	
+	private boolean running = false;
 	
 	public GUI () {
 		clock = new Clock();
@@ -38,7 +53,102 @@ public class GUI {
 		alarmHour = alarmTime.substring(18, 20);
 		alarmMinute = alarmTime.substring(21, 23);
 		
+		// Make a new frame
 		makeFrame();
+		
+		// Make the clock run
+		running = true;
+		clockRunning = new ClockThread();
+		clockRunning.start();
+	}
+	
+	/**
+	 * A class to make the clock run automatically.
+	 * Time checks could be refactored to clock class better.
+	 * 
+	 * @author n-c0de-r
+	 * @version 2021.07.22
+	 */
+	class ClockThread extends Thread {
+		
+		private int seconds = 0;
+		private AudioInputStream aio;
+		private Clip clip;
+		private DataLine.Info info;
+		
+		public void run() {
+			
+			File audio = new File("./alarm.wav");
+			
+			try {
+				// Set up the audio stream
+				aio = AudioSystem.getAudioInputStream(audio);
+				clip = AudioSystem.getClip();
+				AudioFormat format = aio.getFormat();
+				 
+				info = new DataLine.Info(Clip.class, format);
+				
+				clip = (Clip) AudioSystem.getLine(info);
+				
+			} catch (UnsupportedAudioFileException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (LineUnavailableException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+        	try {
+        		while (running) {
+        			// Wait one second
+        			Thread.sleep(1000);
+        			
+        			// Close the audio
+        			clip.stop();
+        			clip.close();
+        			
+        			// Set dots in-/visible each second
+        			dots.setVisible(!dots.isVisible());
+        			
+        			seconds++;
+        			seconds = seconds % 60;
+        			
+        			// When seconds roll over
+        			if (seconds == 0) {
+        				clock.tick();
+        				time = clock.getTime();
+        				hour = time.substring(0, 2);
+        				minute = time.substring(time.length()-2, time.length());
+        				hours.setText(hour);
+        				minutes.setText(minute);
+        			}
+        			
+        			// Get the alarm time from input fields
+        			alarmHour = alarmHours.getText();
+        			alarmMinute = alarmMinutes.getText();
+        			
+        			// Check if the alarm is on
+        			if (alarmHour.equals(hour) && alarmMinute.equals(minute)
+        				&& seconds == 0 && alarm.isSelected()) {
+        				clip.open(aio);
+        	            clip.start();
+        	        }
+        			
+        		}
+        	} catch (InterruptedException e) {
+        		// TODO Auto-generated catch block
+        		e.printStackTrace();
+        	} catch (LineUnavailableException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**
@@ -93,7 +203,8 @@ public class GUI {
 		// Create and initialize new Textfields for the alarm
 		alarmHours = new JTextField(alarmHour);
 		alarmMinutes = new JTextField(alarmMinute);
-		alarm = new JToggleButton("OFF");
+		alarm = new JToggleButton("on/\noff");
+		alarm.addActionListener(e -> clock.toggleAlarm());
 		
 		// Add all labels to the alarm panel
 		alarmPanel.add(new JLabel("Alarm "));
