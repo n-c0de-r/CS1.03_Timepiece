@@ -23,5 +23,11 @@ public class GUI {
 		
 		// Main content pane, holding all buttons and stuff
 		JPanel contentPane = (JPanel) frame.getContentPane();
+		
+		// Pack all elements together
+		frame.pack();
+		
+		// Show the final frame
+		frame.setVisible(true);
 	}
 }
