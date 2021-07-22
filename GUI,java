@@ -1,0 +1,27 @@
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+/**
+ * A GUI for the Clock.
+ * 
+ * @author n-c0de-r
+ * @version 21.07.22
+ */
+public class GUI {
+	
+	public GUI () {
+		makeFrame();
+		Clock clock = new Clock();
+	}
+	
+	/**
+	 * Setup a new JFrame with all buttons and displays.
+	 */
+	private void makeFrame() {
+		// Main window frame
+		JFrame frame = new JFrame();
+		
+		// Main content pane, holding all buttons and stuff
+		JPanel contentPane = (JPanel) frame.getContentPane();
+	}
+}
