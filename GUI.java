@@ -4,6 +4,7 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -41,7 +42,7 @@ public class GUI {
 	private boolean running = false;
 	
 	public GUI () {
-		clock = new Clock();
+		clock = new Clock(LocalDateTime.now().getHour()%12, LocalDateTime.now().getMinute());
 		
 		// Get the numbers from the clock
 		time = clock.getTime();
