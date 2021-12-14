@@ -28,4 +28,4 @@ Everything else could be pretty much the same.
 
 Note: This project does not implement adequate handling of errors.
 
-<img srcc="Clock_show.gif">
+<img src="Clock_show.gif">
