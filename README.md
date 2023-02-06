@@ -1,31 +1,30 @@
-# Lab1.3
-1st semester's Lab, making a clock with different functions.
-Following the original ReadMe:
+Description from the project:
+The TimeDisplay class implements a digital clock display for a...
 
-Project: clock-display
-Authors: David Barnes and Michael Kölling
+1) European-style 24 hour clock. The clock shows hours and minutes. The
+range of the clock is 00:00 (midnight) to 23:59 (one minute before midnight).
 
-This project is part of the material for the book
+or
 
-   Objects First with Java - A Practical Introduction using BlueJ
-   Sixth edition
-   David J. Barnes and Michael Kölling
-   Pearson Education, 2016
+2) US-style 12 hour clock. The clock shows hours and minutes. The range of
+the clock is 01:00 (midnight) to 12:59 (one minute before midnight)
+and keeps track if it's am or pm
 
-It is discussed in chapter 3.
+or
 
-To use this project, create an instance of class ClockDisplay. Then inspect this 
-instance and leave the object inspector window open. With the inspector window open, 
-call the object's methods, such as timeTick and setTime. Watch the 
-"displayString" in the inspector.
+3) A "fake" US-style showing 12 hour clock but is a European clock inside.
 
-The displayString field simulates the actual clock display device. Were this 
-program running in a real clock, it would change the real, physical display 
-hardware instead of this string. The timeTick method would be triggered once 
-every minute by some timer hardware.
+The clock display receives "ticks" (via the timeTick method) every minute
+and reacts by incrementing the display. This is done in the usual clock
+fashion: the hour increments when the minutes roll over to zero.
 
-Everything else could be pretty much the same.
+Based on the original by David J. Barnes and Michael Kölling
+@author n-c0de-r
+@version 2023.02.05
 
-Note: This project does not implement adequate handling of errors.
+<img src="TImepiece_show.gif">
 
-<img src="Clock_show.gif">
+Includes a very basic GUI and with a sound file, could potentiall
+even play an alarm sound when everything is set up correctly.
+
+<img src="GUI_show.gif">

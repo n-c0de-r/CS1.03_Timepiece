@@ -1,6 +1,6 @@
 
 /**
- * The ClockDisplay class implements a digital clock display for a...
+ * The TimeDisplay class implements a digital clock display for a...
  * 1) European-style 24 hour clock. The clock shows hours and minutes. The 
  * range of the clock is 00:00 (midnight) to 23:59 (one minute before 
  * midnight).
@@ -20,13 +20,12 @@
  * 
  * The following is just an adapted copy of the original project.
  * @author n-c0de-r
- * @version 21.05.03
- * @version 22.10.03
+ * @version 2023.02.06
  */
-public class ClockDisplay
+public class TimeDisplay
 {
-    private NumberDisplay hours;
-    private NumberDisplay minutes;
+    private DigitalNumber hours;
+    private DigitalNumber minutes;
     private String displayString;    // simulates the actual display
     // New fields
     private String clockType; // European, Fake_US, True_US
@@ -38,34 +37,34 @@ public class ClockDisplay
     private boolean isAlarmAM;
     private boolean alarmOn;
     /**
-     * Constructor for ClockDisplay objects. This constructor 
+     * Constructor for TimeDisplay objects. This constructor 
      * creates a new clock set at 00:00.
      */
-    public ClockDisplay()
+    public TimeDisplay()
     {
-        /*hours = new NumberDisplay(24);
-        minutes = new NumberDisplay(60);
+        /*hours = new DigitalNumber(24);
+        minutes = new DigitalNumber(60);
         updateDisplay();*/
         this(0, 0, "European", true);
     }
 
     /**
-     * Constructor for ClockDisplay objects. This constructor
+     * Constructor for TimeDisplay objects. This constructor
      * creates a new clock set at the time specified by the 
      * parameters.
      * @param hour      Hour to be set, integer value
      * @param minute    Minute to be set, integer value
      * @param type      Sets the clock's type
      */
-    public ClockDisplay(int hour, int minute, String type, boolean am)
+    public TimeDisplay(int hour, int minute, String type, boolean am)
     {
         clockType = type;
-        hours = new NumberDisplay(24);
+        hours = new DigitalNumber(24);
         if (isTrueUS()) { // Assignment 4
-            hours = new NumberDisplay(12);
+            hours = new DigitalNumber(12);
         }
         
-        minutes = new NumberDisplay(60);
+        minutes = new DigitalNumber(60);
         // Reset the time as given
         setTime(hour, minute, am);
     }
@@ -88,8 +87,8 @@ public class ClockDisplay
     }
 
     /**
-     * Set the time of the display to the specified hour and
-     * minute.
+     * Set the time of the display to the specified hour and minute.
+     * 
      * @param hour      Hour to be set, integer value
      * @param minute    Minute to be set, integer value
      * @param setAM     Sets am or pm
@@ -113,6 +112,8 @@ public class ClockDisplay
 
     /**
      * Return the current time of this display in the format HH:MM.
+     * 
+     * @return  The time as a string.
      */
     public String getTime()
     {
@@ -200,7 +201,7 @@ public class ClockDisplay
 
     /**
      * Return the current time of the alarm in the format HH:MM.
-     * @return display   String of text with set alarm time.
+     * @return  String of text with set alarm time.
      */
     public String alarmTime()
     {
@@ -244,10 +245,20 @@ public class ClockDisplay
         }
     }
     
+    /**
+     * Checks if the clock is internally working as an
+     * European clock in a 24h style.
+     * @return  True is clockType is set to "European".
+     */
     private boolean isEuropean() {
         return clockType.equals("European");
     }
     
+    /**
+     * Checks if the clock is internally working as an
+     * US clock style - having only hour values 01-12 and AM&PM.
+     * @return  True is clockType is set to "True_US".
+     */
     private boolean isTrueUS() {
         return clockType.equals("True_US");
     }

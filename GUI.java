@@ -26,11 +26,11 @@ import javax.swing.SwingConstants;
  * A GUI for the Clock.
  * 
  * @author n-c0de-r
- * @version 2021.07.22
+ * @version 2023.02.06
  */
 public class GUI {
     
-    private ClockDisplay clock;
+    private TimeDisplay clock;
     private ClockThread clockRunning;
     
     private JLabel hours, dots, minutes;
@@ -53,7 +53,7 @@ public class GUI {
         
         int hrs  = LocalDateTime.now().getHour();
         int mins = LocalDateTime.now().getMinute();
-        clock = new ClockDisplay(hrs, mins, country, hrs<12);
+        clock = new TimeDisplay(hrs, mins, country, hrs<12);
         
         // Get the numbers from the clock
         time = clock.getTime();
